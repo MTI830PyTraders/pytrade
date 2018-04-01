@@ -56,26 +56,26 @@ else:
     weights = dict([(el,1) for el in args.stocks.split(',')])
 
 #normalize weights
-total = sum([float(el) for el in weights.values()])
+total = sum([float(el) for el in list(weights.values())])
 for ticker in weights:
     weights[ticker]=float(weights[ticker])/total
-print weights
+print(weights)
     
 # create marker_environment    
 ma = market_environment('ma', args.start)
-ma.add_list('symbols', weights.keys())
+ma.add_list('symbols', list(weights.keys()))
 ma.add_constant('source', 'google')
 ma.add_constant('final date', args.end)
 port = mean_variance_portfolio('am_tech_stocks', ma)
 visualize(port, len(weights))
-port.set_weights(weights.values())
+port.set_weights(list(weights.values()))
 
 
 
 def eval_port(name):
-    print "evaluation %s" %name 
-    print port
-    print "return = ",port.get_portfolio_return()
+    print("evaluation %s" %name) 
+    print(port)
+    print("return = ",port.get_portfolio_return())
 
 eval_port("default distribution")
 for opt in ["Return", 'Vol', 'Sharpe']:
